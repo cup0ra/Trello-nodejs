@@ -10,6 +10,4 @@ const updateUser = (user) => usersRepo.updateUser(user)
 
 const deleteUser = (user) => usersRepo.deleteUser(user);
 
-
-
 module.exports = { getAll, getById, addUser, deleteUser, updateUser };

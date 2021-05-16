@@ -1,16 +1,10 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const Board = require('./board.model');
 const boardService = require('./board.service')
 
-router.use((req, res, next) => {
-  // do logging
-  console.log('LOGGER',req.method, req.body);
-  next(); // make sure we go to the next routes and don't stop here
-});
-
 router.route('/').get(async (req, res) => {
-const boards = await boardService.getAll()
   try { 
+    const boards = await boardService.getAll()
     res.status(200).json(boards);
   }
   catch(err){
@@ -20,20 +14,18 @@ const boards = await boardService.getAll()
 router.route('/:boardId').get(async (req, res) => {
     const { boardId } = req.params;
     const board = await boardService.getById(boardId);
-    console.log('BORD______ID', board, boardId);
   if(board){
       res.status(200).json(board);
     }
-   else{
+  else{
       res.status(404).send(404)
     }
   });
 
   router.route('/').post(async (req, res) => {
-    const board = new Board(req.body)
-    await boardService.add(board);
-     console.log('BOARD',board, Board.toResponse(board),req.body)
-     try { 
+    try { 
+      const board = new Board(req.body)
+      await boardService.add(board);
       res.status(201).json(board);
     }
     catch(err){
@@ -42,10 +34,10 @@ router.route('/:boardId').get(async (req, res) => {
   });
 
   router.route('/:boardId').put(async (req, res) => {
-    const { boardId } = req.params;
-       const { body } = req;
-     await boardService.update({...body, id: boardId});
-     try { 
+    try { 
+      const { boardId } = req.params;
+      const { body } = req;
+      await boardService.update({...body, id: boardId});
       res.status(200).json({...body, id: boardId});
     }
     catch(err){
@@ -54,13 +46,13 @@ router.route('/:boardId').get(async (req, res) => {
   });
   
   router.route('/:boardId').delete(async (req, res) => {
-  await boardService.deleteBoard(req.params.boardId)
-   try { 
-    res.status(200).send(200);
-  }
-  catch(err){
-    res.status(404).send(404)
-  }
-  });
+    try { 
+      await boardService.deleteBoard(req.params.boardId)
+      res.status(200).send(200);
+    }
+    catch(err){
+      res.status(404).send(404)
+    }
+    });
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const tasks = require('../tasks/task.memory.repository')
 
 let users = []
 
@@ -16,6 +17,11 @@ const updateUser = async ({...user}) => {
 
 const deleteUser = async (id) => {
    users = users.filter((user) => user.id !== id)
+   ;(await tasks.getAll()).forEach((e) => {
+      if(e.userId === id){
+         e.userId = null
+      }
+   })
 }
 
 module.exports = { getAll, getById, addUser, deleteUser, updateUser };
