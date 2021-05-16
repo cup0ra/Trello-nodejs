@@ -8,46 +8,42 @@ router.route('/').get(async (req, res) => {
 });
 
 router.route('/:userId').get(async (req, res) => {
- try { 
+  try {
     const { userId } = req.params;
     const user = await usersService.getById(userId);
     res.status(200).json(User.toResponse(user));
-  }
-  catch(err){
-    res.status(404).send(404)
+  } catch (err) {
+    res.status(404).send(404);
   }
 });
 router.route('/').post(async (req, res) => {
   try {
-    const user = new User(req.body)
-    await usersService.addUser({...user}); 
+    const user = new User(req.body);
+    await usersService.addUser({ ...user });
     res.status(201).json(User.toResponse(user));
-  }
-  catch(err){
-    res.status(404).send(404)
+  } catch (err) {
+    res.status(404).send(404);
   }
 });
 
 router.route('/:userId').put(async (req, res) => {
-   try { 
+  try {
     const { userId } = req.params;
     const { body } = req;
-    await usersService.updateUser({...body, id: userId});
-    res.status(200).json(User.toResponse({...body, id: userId}));
-  }
-  catch(err){
-    res.status(404).send(404)
+    await usersService.updateUser({ ...body, id: userId });
+    res.status(200).json(User.toResponse({ ...body, id: userId }));
+  } catch (err) {
+    res.status(404).send(404);
   }
 });
 
 router.route('/:userId').delete(async (req, res) => {
- try { 
-  await usersService.deleteUser(req.params.userId)
-  res.status(200).send(200);
-}
-catch(err){
-  res.status(404).send(404)
-}
+  try {
+    await usersService.deleteUser(req.params.userId);
+    res.status(200).send(200);
+  } catch (err) {
+    res.status(404).send(404);
+  }
 });
 
 module.exports = router;
