@@ -1,6 +1,17 @@
 const uuid = require('uuid');
-
+/** Class representing a task. */
 class Task {
+
+  /**
+   * @typedef {Object} Task - object task
+   * @property {number} id - task id
+   * @property {string} title - task title
+   * @property {number} order - task order
+   * @property {string} description - task description
+   * @property {?number} userId - task user id
+   * @property {?number} boardId  - task board id
+   * @property {?number} columnId - task column id
+   */
   constructor({
     id = uuid.v4(),
     title = 'TITLE',
