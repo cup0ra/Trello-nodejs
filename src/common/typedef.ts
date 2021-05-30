@@ -15,7 +15,7 @@
 
 /**
  * Columns object
- * @typedef {Object} Column 
+ * @typedef {Object} Column
  * @property {number} id - column id
  * @property {string} title - title title
  * @property {string} order - board order
