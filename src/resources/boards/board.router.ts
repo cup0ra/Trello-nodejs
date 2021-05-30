@@ -1,8 +1,10 @@
-const router = require('express').Router({ mergeParams: true });
-const Board = require('./board.model');
-const boardService = require('./board.service');
+import { Router } from 'express';
+import Board from './board.model';
+import * as boardService from './board.service';
 
-router.route('/').get(async (req, res) => {
+const router = Router({ mergeParams: true });
+
+router.route('/').get(async (_req, res) => {
   try {
     const boards = await boardService.getAll();
     res.status(200).json(boards);
@@ -22,7 +24,8 @@ router.route('/:boardId').get(async (req, res) => {
 
 router.route('/').post(async (req, res) => {
   try {
-    const board = new Board(req.body);
+    const { title, columns } = req.body;
+    const board = new Board(title, columns);
     await boardService.add(board);
     res.status(201).json(board);
   } catch (err) {
@@ -43,11 +46,12 @@ router.route('/:boardId').put(async (req, res) => {
 
 router.route('/:boardId').delete(async (req, res) => {
   try {
-    await boardService.deleteBoard(req.params.boardId);
+    const { boardId } = req.params;
+    await boardService.deleteBoard(boardId);
     res.status(200).send(200);
   } catch (err) {
     res.status(404).send(404);
   }
 });
 
-module.exports = router;
+export default router;
