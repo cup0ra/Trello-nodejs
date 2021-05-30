@@ -4,7 +4,7 @@ export interface IBoard {
   columns: Columns[]
 }
 
-export interface Columns {
+interface Columns {
   id: string;
   title: string;
   order: number;
