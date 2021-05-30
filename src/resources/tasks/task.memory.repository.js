@@ -1,19 +1,10 @@
-  /**
-   * @typedef {Object} Task - object task
-   * @property {number} id - task id
-   * @property {string} title - task title
-   * @property {number} order - task order
-   * @property {string} description - task description
-   * @property {?number} userId - task user id
-   * @property {?number} boardId  - task board id
-   * @property {?number} columnId - task column id
-   */
+require('../../common/typedef');
 
 let tasks = [];
 
 /**
  * Get all tasks
- * @returns {Task[]}
+ * @returns {Promise<ITask[]>} promise array tasks
  */
 
 const getAll = async () => tasks;
@@ -21,15 +12,15 @@ const getAll = async () => tasks;
 /**
  * Get task.
  * @param {number} id - tast id
- * @return {Task} - return task
+ * @return {Promise<ITask>} - promise task
  */
 
 const getById = async (id) => tasks.find((e) => e.id === id);
 
 /**
  * Add task.
- * @param {Task} user - object task
- * @return {void} 
+ * @param {ITask} task - object task
+ * @return {Promise<void>} promise
  */
 
 const addTask = async (task) => {
@@ -38,8 +29,8 @@ const addTask = async (task) => {
 
 /**
  * Update task.
- * @param {Task} user - object task
- * @return {void} 
+ * @param {ITask} task - object task
+ * @return {Promise<void>} promise
  */
 
 const updateTask = async ({ ...task }) => {
@@ -49,9 +40,8 @@ const updateTask = async ({ ...task }) => {
 /**
  * Delete task.
  * @param {number} id - task id
- * @return {void} 
+ * @return {Promise<void>} promise
  */
-
 
 const deleteTask = async (id) => {
   tasks = tasks.filter((user) => user.id !== id);
@@ -60,7 +50,7 @@ const deleteTask = async (id) => {
 /**
  * delete a task from the board
  * @param {number} id - task id
- * @return {void} 
+ * @return {Promise<void>} promise
  */
 
 const deleteTaskOfBord = async (id) => {

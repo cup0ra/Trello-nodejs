@@ -1,18 +1,11 @@
 const tasks = require('../tasks/task.memory.repository');
-/**
-* Object user
- * @typedef {Object} User
- * @property {number} id - id user 
- * @property {string} name - name user 
- * @property {string} login - login user
- * @property {string} password - password user
- */
+require('../../common/typedef');
 
 let users = [];
 
 /**
  * Get all users.
- * @return {User[]} return array users
+ * @return {Promise<IUser[]>} promise array users
  */
 
 const getAll = async () => users;
@@ -20,15 +13,15 @@ const getAll = async () => users;
 /**
  * Get user.
  * @param {number} id - user id
- * @return {User} - return user
+ * @return {Promise<IUser>} - promise user
  */
 
 const getById = async (id) => users.find((e) => e.id === id);
 
 /**
  * Add user.
- * @param {User} user - object user
- * @return {void} 
+ * @param {IUser} user - object user
+ * @return {Promise<void>} promise
  */
 
 const addUser = async (user) => {
@@ -37,8 +30,8 @@ const addUser = async (user) => {
 
 /**
  * Update user.
- * @param {User} user - object user
- * @return {void} 
+ * @param {IUser} user - object user
+ * @return {Promise<void>} promise
  */
 
 const updateUser = async ({ ...user }) => {
@@ -46,11 +39,10 @@ const updateUser = async ({ ...user }) => {
 };
 
 /**
- * Delete user.
+ * Delete user and all user tasks.
  * @param {number} id - user id
- * @return {void} 
+ * @return {Promise<void>} promise
  */
-
 
 const deleteUser = async (id) => {
   users = users.filter((user) => user.id !== id);

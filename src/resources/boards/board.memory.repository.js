@@ -1,26 +1,11 @@
 const tasks = require('../tasks/task.memory.repository');
-
-    /**
-   * Columns object
-   * @typedef {Object} Column
-   * @property {number} id - column id
-   * @property {string} title - title title
-   * @property {string} order - board order
- */
-
-  /**
-   * Create Board
-   * @typedef {Object} Board
-   * @property {number} id - boar id
-   * @property {string} title - board title
-   * @property {Column[]} columns - board columns
- */
+require('../../common/typedef')
 
 let boards = [];
 
 /**
  * Get all boards
- * @returns {Board[]} return  array boards
+ * @returns {Promise<IBoard[]>} promise array boards
  */
 
 const getAll = async () => boards;
@@ -28,15 +13,15 @@ const getAll = async () => boards;
 /**
  * Get board by id
  * @param {number} id board id
- * @returns {Board} return board
+ * @returns {Promise<IBoard>} promise board
  */
 
 const getById = async (id) => boards.find((e) => e.id === id);
 
 /**
  * Add board
- * @param {Board} board - object board
- * @returns {void}
+ * @param {IBoard} board - object board
+ * @returns {Promise<void>} promise
  */
 
 const addBoard = async (board) => {
@@ -44,9 +29,9 @@ const addBoard = async (board) => {
 };
 
 /**
- * Update boards
- * @param {Board} board - object board
- * @returns {void}  
+ * Update board
+ * @param {IBoard} board - object board
+ * @returns {Promise<void>}  promise
  */
 
 const updateBoard = async ({ ...board }) => {
@@ -54,9 +39,9 @@ const updateBoard = async ({ ...board }) => {
 };
 
 /**
- * Delete board
+ * Delete the board and all tasks of the board
  * @param {number} id - board id 
- * @returns {void}
+ * @returns {Promise<void>} promise
  */
 
 const deleteBoard = async (id) => {
