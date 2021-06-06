@@ -1,8 +1,10 @@
-const router = require('express').Router({ mergeParams: true });
-const Task = require('./task.model');
-const taskService = require('./task.service');
+import { Router, Request } from 'express';
+import { Task } from './task.model';
+import * as taskService from './task.service';
 
-router.route('/').get(async (req, res) => {
+const router = Router({ mergeParams: true });
+
+router.route('/').get(async (_req, res) => {
   try {
     const tasks = await taskService.getAll();
     res.status(200).json(tasks);
@@ -21,12 +23,13 @@ router.route('/:taskId').get(async (req, res) => {
   }
 });
 
-router.route('/').post(async (req, res) => {
+router.route('/').post(async (req: Request<{ boardId: string }>, res) => {
   try {
     const { boardId } = req.params;
-    const board = new Task({ ...req.body, boardId });
-    await taskService.addTask(board);
-    res.status(201).json(board);
+    const { title, order, description } = req.body;
+    const task = new Task(title, order, description, boardId);
+    await taskService.addTask(task);
+    res.status(201).json(task);
   } catch (err) {
     res.status(404).send(404);
   }
@@ -52,4 +55,4 @@ router.route('/:taskId').delete(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

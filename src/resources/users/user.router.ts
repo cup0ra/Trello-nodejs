@@ -1,8 +1,10 @@
-const router = require('express').Router();
-const User = require('./user.model');
-const usersService = require('./user.service');
+import { Router } from 'express';
+import User from './user.model';
+import * as usersService from './user.service';
 
-router.route('/').get(async (req, res) => {
+const router = Router();
+
+router.route('/').get(async (_req, res) => {
   const users = await usersService.getAll();
   res.status(200).json(users.map(User.toResponse));
 });
@@ -11,15 +13,16 @@ router.route('/:userId').get(async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await usersService.getById(userId);
-    res.status(200).json(User.toResponse(user));
+    res.status(200).json(User.toResponse(user!));
   } catch (err) {
     res.status(404).send(404);
   }
 });
 router.route('/').post(async (req, res) => {
   try {
-    const user = new User(req.body);
-    await usersService.addUser({ ...user });
+    const { name, login, password } = req.body;
+    const user = new User(name, login, password);
+    await usersService.addUser(user);
     res.status(201).json(User.toResponse(user));
   } catch (err) {
     res.status(404).send(404);
@@ -46,4 +49,4 @@ router.route('/:userId').delete(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
