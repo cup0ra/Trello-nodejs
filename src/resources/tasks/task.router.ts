@@ -1,57 +1,65 @@
 import { Router, Request } from 'express';
+import {
+  OK, CREATED, BAD_REQUEST, NOT_FOUND,
+} from '../../common/statusCodes';
+import { BaseError } from '../../common/errorHandler';
 import { Task } from './task.model';
 import * as taskService from './task.service';
 
 const router = Router({ mergeParams: true });
 
-router.route('/').get(async (_req, res) => {
+router.route('/').get(async (_req, res, next) => {
   try {
     const tasks = await taskService.getAll();
-    res.status(200).json(tasks);
+    res.status(OK).json(tasks);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
-router.route('/:taskId').get(async (req, res) => {
-  const { taskId } = req.params;
-  const task = await taskService.getById(taskId);
-  if (task) {
-    res.status(200).json(task);
-  } else {
-    res.status(404).send(404);
+router.route('/:taskId').get(async (req, res, next) => {
+  try {
+    const { taskId } = req.params;
+    const task = await taskService.getById(taskId);
+    if (!task) throw new BaseError(`Task '${taskId}' not found`, NOT_FOUND);
+    res.status(OK).json(task);
+  } catch (err) {
+    next(err);
   }
 });
 
-router.route('/').post(async (req: Request<{ boardId: string }>, res) => {
+router.route('/').post(async (req: Request<{ boardId: string }>, res, next) => {
   try {
     const { boardId } = req.params;
     const { title, order, description } = req.body;
     const task = new Task(title, order, description, boardId);
     await taskService.addTask(task);
-    res.status(201).json(task);
+    res.status(CREATED).json(task);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
-router.route('/:taskdId').put(async (req, res) => {
+router.route('/:taskdId').put(async (req, res, next) => {
   try {
     const { taskdId } = req.params;
     const { body } = req;
-    await taskService.updateTask({ ...body, id: taskdId });
-    res.status(200).json({ ...body, id: taskdId });
+    const taskIndex = await taskService.updateTask({ ...body, id: taskdId });
+    if (!taskIndex) throw new BaseError(`Task '${taskdId}' not found`, BAD_REQUEST);
+    res.status(OK).json({ ...body, id: taskdId });
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
-router.route('/:taskId').delete(async (req, res) => {
+router.route('/:taskId').delete(async (req, res, next) => {
   try {
-    await taskService.deleteTask(req.params.taskId);
-    res.status(200).send(200);
+    const { taskId } = req.params;
+    const isTask = await taskService.deleteTask(req.params.taskId);
+    if (!isTask) throw new BaseError(`Task '${taskId}' not found`, BAD_REQUEST);
+    res.status(OK).send(OK);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 

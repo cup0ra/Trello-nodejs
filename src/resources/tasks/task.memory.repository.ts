@@ -10,12 +10,16 @@ const addTask = async (task: ITask): Promise<void> => {
   tasks = [...tasks, task];
 };
 
-const updateTask = async (task: ITask): Promise<void> => {
-  tasks = tasks.map((e) => (e.id === task.id ? { ...e, ...task } : e));
+const updateTask = async (task: ITask): Promise<number> => {
+  const indexTask = tasks.findIndex((e) => e.id === task.id);
+  if (indexTask >= 0) tasks[indexTask] = { ...tasks[indexTask], ...task };
+  return indexTask;
 };
 
-const deleteTask = async (id: string): Promise<void> => {
-  tasks = tasks.filter((user) => user.id !== id);
+const deleteTask = async (id: string): Promise<boolean> => {
+  const isTask = tasks.some((e) => e.id === id);
+  if (isTask) tasks = tasks.filter((task) => task.id !== id);
+  return isTask;
 };
 
 const deleteTaskOfBord = async (id: string): Promise<void> => {

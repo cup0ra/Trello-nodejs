@@ -10,12 +10,16 @@ const addBoard = async (board: IBoard): Promise<void> => {
   boards = [...boards, board];
 };
 
-const updateBoard = async (board: IBoard): Promise<void> => {
-  boards = boards.map((e) => (e.id === board.id ? { ...e, ...board } : e));
+const updateBoard = async (board: IBoard): Promise<number> => {
+  const indexUser = boards.findIndex((e) => e.id === board.id);
+  if (indexUser >= 0) boards[indexUser] = { ...boards[indexUser], ...board };
+  return indexUser;
 };
 
-const deleteBoard = async (id: string): Promise<void> => {
-  boards = boards.filter((user) => user.id !== id);
+const deleteBoard = async (id: string): Promise<boolean> => {
+  const isUser = boards.some((e) => e.id === id);
+  if (isUser) boards = boards.filter((board) => board.id !== id);
+  return isUser;
 };
 
 export {

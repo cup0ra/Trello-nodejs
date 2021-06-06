@@ -9,11 +9,12 @@ const getById = (id: string): Promise<IBoard | undefined> => boardRepo.getById(i
 
 const add = (board: IBoard): Promise<void> => boardRepo.addBoard(board);
 
-const update = (board: IBoard): Promise<void> => boardRepo.updateBoard(board);
+const update = (board: IBoard): Promise<number> => boardRepo.updateBoard(board);
 
-const deleteBoard = async (id: string): Promise<void> => {
-  boardRepo.deleteBoard(id);
-  await tasks.deleteTaskOfBord(id);
+const deleteBoard = async (id: string): Promise<boolean> => {
+  const isBoard = await boardRepo.deleteBoard(id);
+  if (isBoard) await tasks.deleteTaskOfBord(id);
+  return isBoard;
 };
 
 export {
