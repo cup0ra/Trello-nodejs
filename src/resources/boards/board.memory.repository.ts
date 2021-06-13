@@ -1,6 +1,7 @@
+import { db } from '../../common/db';
 import { IBoard } from './model';
 
-let boards: IBoard[] = [];
+let { boards } = db;
 
 const getAll = async (): Promise<IBoard[]> => boards;
 

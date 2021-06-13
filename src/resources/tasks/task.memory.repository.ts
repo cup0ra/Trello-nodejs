@@ -1,6 +1,7 @@
+import { db } from '../../common/db';
 import { ITask } from './model';
 
-let tasks: ITask[] = [];
+let { tasks } = db;
 
 const getAll = async (): Promise<ITask[]> => tasks;
 
