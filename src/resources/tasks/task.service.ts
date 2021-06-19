@@ -8,9 +8,9 @@ const getById = (id: string): Promise<ITask | undefined> => taskRepo.getById(id)
 
 const addTask = (task: ITask): Promise<void> => taskRepo.addTask(task);
 
-const updateTask = (task: ITask): Promise<void> => taskRepo.updateTask(task);
+const updateTask = (task: ITask): Promise<number> => taskRepo.updateTask(task);
 
-const deleteTask = (id: string): Promise<void> => taskRepo.deleteTask(id);
+const deleteTask = (id: string): Promise<boolean> => taskRepo.deleteTask(id);
 
 export {
   getAll, getById, addTask, updateTask, deleteTask,

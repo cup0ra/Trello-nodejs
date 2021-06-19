@@ -10,12 +10,16 @@ const addUser = async (user: IUser): Promise<void> => {
   users = [...users, user];
 };
 
-const updateUser = async (user: IUser): Promise<void> => {
-  users = users.map((e) => (e.id === user.id ? { ...e, ...user } : e));
+const updateUser = async (user: IUser): Promise<number> => {
+  const indexUser = users.findIndex((e) => e.id === user.id);
+  if (indexUser >= 0)users[indexUser] = { ...users[indexUser], ...user };
+  return indexUser;
 };
 
-const deleteUser = async (id: string): Promise<void> => {
-  users = users.filter((user) => user.id !== id);
+const deleteUser = async (id: string): Promise<boolean> => {
+  const isUser = users.some((e) => e.id === id);
+  if (isUser) users = users.filter((user) => user.id !== id);
+  return isUser;
 };
 
 export {

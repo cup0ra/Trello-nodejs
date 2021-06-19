@@ -1,56 +1,69 @@
 import { Router } from 'express';
+import { BaseError } from '../../common/errorHandler';
+import {
+  OK, CREATED, NOT_FOUND, BAD_REQUEST,
+} from '../../common/statusCodes';
 import Board from './board.model';
 import * as boardService from './board.service';
 
 const router = Router({ mergeParams: true });
 
-router.route('/').get(async (_req, res) => {
+router.route('/').get(async (_req, res, next) => {
   try {
     const boards = await boardService.getAll();
-    res.status(200).json(boards);
+    res.status(OK).json(boards);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
-router.route('/:boardId').get(async (req, res) => {
-  const { boardId } = req.params;
-  const board = await boardService.getById(boardId);
-  if (board) {
-    res.status(200).json(board);
-  } else {
-    res.status(404).send(404);
+router.route('/:boardId').get(async (req, res, next) => {
+  try {
+    const { boardId } = req.params;
+    const board = await boardService.getById(boardId);
+    if (!board) throw new BaseError(`Board '${boardId}' not found`, NOT_FOUND);
+    res.status(OK).json(board);
+  } catch (err) {
+    next(err);
   }
 });
 
-router.route('/').post(async (req, res) => {
+router.route('/').post(async (req, res, next) => {
   try {
     const { title, columns } = req.body;
     const board = new Board(title, columns);
     await boardService.add(board);
-    res.status(201).json(board);
+    res.status(CREATED).json(board);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
-router.route('/:boardId').put(async (req, res) => {
+router.route('/:boardId').put(async (req, res, next) => {
   try {
     const { boardId } = req.params;
     const { body } = req;
-    await boardService.update({ ...body, id: boardId });
-    res.status(200).json({ ...body, id: boardId });
+    const boardIndex = await boardService.update({ ...body, id: boardId });
+    if (boardIndex < 0) throw new BaseError(`Board '${boardId}' not found`, NOT_FOUND);
+    res.status(OK).json({ ...body, id: boardId });
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
-router.route('/:boardId').delete(async (req, res) => {
+router.route('/:boardId').delete(async (req, res, next) => {
   try {
     const { boardId } = req.params;
-    await boardService.deleteBoard(boardId);
-    res.status(200).send(200);
+    const isBoard = await boardService.deleteBoard(boardId);
+    console.log('[ISBOARD]', isBoard);
+
+    if (!isBoard) {
+      console.log('[BOARD]');
+
+      throw new BaseError(`Board '${boardId}' not found`, BAD_REQUEST);
+    }
+    res.status(OK).send(OK);
   } catch (err) {
-    res.status(404).send(404);
+    next(err);
   }
 });
 
