@@ -1,18 +1,14 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import { AUTH_MODE, PORT, NODE_ENV, MONGO_CONNECTION_STRING, JWT_SECRET_KEY } from "./conctans-evn";
 
-dotenv.config({
-  path: path.join(__dirname, '../../.env'),
-});
 
-const {
-  PORT, NODE_ENV, MONGO_CONNECTION_STRING, JWT_SECRET_KEY, AUTH_MODE,
-} = process.env;
 
-export const config = {
+
+ export const config = {
   PORT,
   NODE_ENV,
   MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY,
   AUTH_MODE: AUTH_MODE === 'true',
 };
+
+
