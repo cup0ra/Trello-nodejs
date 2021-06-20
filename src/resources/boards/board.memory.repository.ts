@@ -1,26 +1,33 @@
-import { db } from '../../common/db';
+import { getRepository } from 'typeorm';
+import { Board } from '../../entity/board.entity';
+import { Task } from '../../entity/task.entity';
 import { IBoard } from './model';
 
-let { boards } = db;
+const getAll = async (): Promise<IBoard[]> => getRepository(Board).find();
 
-const getAll = async (): Promise<IBoard[]> => boards;
+const getById = async (id: string): Promise<IBoard | undefined> => getRepository(Board).findOne(id);
 
-const getById = async (id: string): Promise<IBoard | undefined> => boards.find((e) => e.id === id);
-
-const addBoard = async (board: IBoard): Promise<void> => {
-  boards = [...boards, board];
+const addBoard = async (board: Omit<IBoard, 'id'>): Promise<IBoard> => {
+  const userRepository = getRepository(Board);
+  const result = await userRepository.save(board);
+  return result;
 };
 
-const updateBoard = async (board: IBoard): Promise<number> => {
-  const indexUser = boards.findIndex((e) => e.id === board.id);
-  if (indexUser >= 0) boards[indexUser] = { ...boards[indexUser], ...board };
-  return indexUser;
+const updateBoard = async (board: IBoard): Promise<boolean> => {
+  const boardRepository = getRepository(Board);
+  const boardFind = await boardRepository.findOne(board.id);
+  if (boardFind) await boardRepository.update(boardFind.id, board);
+  return !!boardFind;
 };
 
 const deleteBoard = async (id: string): Promise<boolean> => {
-  const isUser = boards.some((e) => e.id === id);
-  if (isUser) boards = boards.filter((board) => board.id !== id);
-  return isUser;
+  const boardRepository = getRepository(Board);
+  const boardFind = await boardRepository.findOne(id);
+  if (boardFind) {
+    await boardRepository.delete(id);
+    await getRepository(Task).delete({ boardId: id });
+  }
+  return !!boardFind;
 };
 
 export {
