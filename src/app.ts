@@ -9,6 +9,7 @@ import taskRouter from './resources/tasks/task.router';
 import loginRouter from './resources/login/login.router';
 import { loggers } from './middleware/logging';
 import { BaseError, handleError, uncaughtOrUnhandledError } from './common/errorHandler';
+import { validate } from './middleware/validate-session';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -24,7 +25,7 @@ app.use('/', (req, res, next) => {
 });
 app.use('/login', loginRouter);
 app.use(loggers);
-
+app.use(validate);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);
