@@ -1,20 +1,22 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column, Entity, OneToMany, PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IUser, UserReturn } from '../resources/users/model';
 import { Task } from './task.entity';
 
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id = '';
+  id: string;
 
   @Column('varchar', { length: 40 })
-  name = '';
+  name: string;
 
   @Column('varchar', { length: 40 })
-  login = '';
+  login: string;
 
   @Column('varchar', { length: 40 })
-  password = '';
+  password: string;
 
   @OneToMany(() => Task, (task) => task.userId)
   tasks: Task[];
