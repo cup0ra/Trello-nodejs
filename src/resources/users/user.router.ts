@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import bcrypt from 'bcrypt';
 import { BaseError } from '../../common/errorHandler';
 import * as usersService from './user.service';
 import {
@@ -29,7 +30,8 @@ router.route('/:userId').get(async (req, res, next) => {
 router.route('/').post(async (req, res, next) => {
   try {
     const { name, login, password } = req.body;
-    const user = await usersService.addUser({ name, login, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await usersService.addUser({ name, login, password: hashedPassword });
     res.status(CREATED).json(user);
   } catch (err) {
     next(err);
@@ -41,8 +43,6 @@ router.route('/:userId').put(async (req, res, next) => {
     const { userId } = req.params;
     const { body } = req;
     const user = await usersService.updateUser({ ...body, id: userId });
-    console.log(user);
-
     if (!user) throw new BaseError(`User '${userId}' not found`, NOT_FOUND);
     res.status(OK).json(OK);
   } catch (err) {
