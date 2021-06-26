@@ -15,7 +15,7 @@ export class User {
   @Column('varchar', { length: 40 })
   login: string;
 
-  @Column('varchar', { length: 40 })
+  @Column('varchar', { length: 140 })
   password: string;
 
   @OneToMany(() => Task, (task) => task.userId)
