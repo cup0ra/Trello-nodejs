@@ -2,9 +2,7 @@ version: "3.7"
 
 services:
     node:
-        build: 
-            context: .
-            dockerfile: Dockerfile
+        build: .
         image: cup0ra/node
         container_name: node
         env_file: .env
@@ -24,15 +22,14 @@ services:
         env_file: .env
         ports: 
             - ${PORT_DB}:${PORT_DB}
-        volumes:
-            - pg_project:/var/lib/postgresql/data
-        restart: always
         environment: 
             POSTGRES_PASSWORD: ${PASSWORD_DB}
             POSTGRES_USER: ${USER_DB}
             POSTGRES_DB: ${DB}
         networks:
             - user-defined
+        volumes:
+            - ./db-data:/var/lib/postgresql/data
 networks: 
     user-defined:
         driver: bridge

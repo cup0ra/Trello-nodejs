@@ -19,7 +19,7 @@ const configDB = {
   migrations: ['src/migrations/*.ts'],
   cli: {
     entitiesDir: 'src/entity',
-    migrationsDir: 'src/migration',
+    migrationsDir: 'src/migrations',
   },
 } as ConnectionOptions;
 
