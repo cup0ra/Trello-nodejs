@@ -1,6 +1,4 @@
-import {
-  PrimaryGeneratedColumn, Column, Entity, JoinColumn, ManyToOne,
-} from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Board } from './board.entity';
 import { User } from './user.entity';
 

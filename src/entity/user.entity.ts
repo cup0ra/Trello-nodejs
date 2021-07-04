@@ -1,7 +1,5 @@
-import {
-  Column, Entity, OneToMany, PrimaryGeneratedColumn,
-} from 'typeorm';
-import { IUser, UserReturn } from '../resources/users/model';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ITask, IUser, UserReturn } from '../common/types';
 import { Task } from './task.entity';
 
 @Entity({ name: 'users' })
@@ -19,7 +17,7 @@ export class User {
   password: string;
 
   @OneToMany(() => Task, (task) => task.userId)
-  tasks: Task[];
+  tasks: ITask[];
 
   static toResponse(user: IUser): UserReturn {
     const { id, name, login } = user;

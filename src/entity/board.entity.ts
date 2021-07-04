@@ -1,11 +1,9 @@
-import {
-  PrimaryGeneratedColumn, Column, Entity, BaseEntity, OneToMany,
-} from 'typeorm';
-import { Columns } from '../resources/boards/model';
+import { Columns, ITask } from '../common/types';
 import { Task } from './task.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'boards' })
-export class Board extends BaseEntity {
+export class Board {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -13,8 +11,8 @@ export class Board extends BaseEntity {
   title: string;
 
   @Column('jsonb', { nullable: true })
-  columns: Columns [];
+  columns: Columns[];
 
   @OneToMany(() => Task, (task) => task.boardId)
-  tasks: Task[];
+  tasks: ITask[];
 }

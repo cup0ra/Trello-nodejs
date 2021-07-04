@@ -5,11 +5,9 @@ const formatter = format.combine(
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.splat(),
   format.printf((info) => {
-    const {
-      timestamp, level, message,
-    } = info;
+    const { timestamp, level, message } = info;
     return `${timestamp} [${level}]: ${message}`;
-  }),
+  })
 );
 
 class LoggerClass {

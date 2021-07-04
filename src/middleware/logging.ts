@@ -3,9 +3,7 @@ import { finished } from 'stream';
 import { logger } from './winston';
 
 export const loggers = (req: Request, res: Response, next: NextFunction): void => {
-  const {
-    method, url, body, query,
-  } = req;
+  const { method, url, body, query } = req;
   const start = Date.now();
   const queryStr = Object.keys(query).length ? `QUERY: ${JSON.stringify(query)}` : '';
   const bodyStr = Object.keys(body).length ? `BODY: ${JSON.stringify(body)}` : '';

@@ -1,26 +1,30 @@
+import { join } from 'path';
 import { ConnectionOptions } from 'typeorm';
 import {
-  DB_HOST, PORT_DB, USER_DB, PASSWORD_DB, DB,
+  POSTGRES_PORT,
+  POSTGRES_PASSWORD,
+  POSTGRES_USER,
+  POSTGRES_DATABASE,
+  POSTGRES_HOST,
 } from './conctans-evn';
 
-const configDB = {
+export const configDB = {
+  name: 'default',
   type: 'postgres',
-  host: DB_HOST,
-  port: PORT_DB,
-  username: USER_DB,
-  password: PASSWORD_DB,
-  database: DB,
-  synchronize: false,
+  host: POSTGRES_HOST,
+  port: parseInt(POSTGRES_PORT),
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DATABASE,
+  synchronize: true,
   logging: true,
   dropSchema: true,
   migrationsRun: true,
   maxQueryExecutionTime: 100,
-  entities: ['src/entity/*.ts'],
-  migrations: ['src/migrations/*.ts'],
+  entities: ['dist/entity/*.entity{ .ts,.js}'],
+  migrations: ['dist/migrations/*{.ts,.js}'],
   cli: {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/migrations',
   },
 } as ConnectionOptions;
-
-export = configDB;
