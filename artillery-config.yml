@@ -1,0 +1,59 @@
+config:
+  target: 'http://localhost:4000'
+  phases:
+    - duration: 5
+      arrivalRate: 5
+      name: Warm up
+    - duration: 10
+      arrivalRate: 5
+      rampTo: 10
+      name: Ramp up load
+    - duration: 15
+      arrivalRate: 10
+      name: Sustained load
+before:
+  flow:
+    - log: "Get auth token"
+    - post:
+        url: "/login"
+        json:
+          login: "admin"
+          password: "admin"
+        capture:
+          - json: $.token
+            as: token      
+scenarios:
+  - name: "Users module"
+    flow:
+      - post:
+          url: "/users"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            name: "test"
+            login: "test"
+            password: "test"
+          capture:
+          - json: "$.id"
+            as: "id"
+      - get:
+          headers:
+            Authorization: "Bearer {{ token }}"
+          url: "/users"
+      - get:
+          headers:
+            Authorization: "Bearer {{ token }}"
+          url: "/users/{{ id }}"
+      - put:
+          url: "/users/{{ id }}"
+          headers:
+            authorization: "Bearer {{ token }}"
+          json:
+            name: "test1"
+            login: "test1"
+            password: "test1"
+      - delete:
+          url: "/users/{{ id }}"
+          headers:
+            authorization: "Bearer {{ token }}"      
+      
