@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -8,10 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { configService } from './config/config.service';
 import { AuthModule } from './auth/auth.module';
-import { loggers } from './middleware/logging';
-import { UsersController } from './users/controller/users.controller';
-import { TasksController } from './tasks/controller/tasks.controller';
-import { BoardsController } from './boards/controller/boards.controller';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './middleware/interceptor';
 
 @Module({
   imports: [
@@ -23,10 +21,12 @@ import { BoardsController } from './boards/controller/boards.controller';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(loggers).forRoutes(UsersController, TasksController, BoardsController);
-  }
-}
+export class AppModule {}

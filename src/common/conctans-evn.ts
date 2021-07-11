@@ -16,4 +16,5 @@ export const {
   POSTGRES_USER,
   POSTGRES_DATABASE,
   POSTGRES_HOST,
+  USE_FASTIFY,
 } = process.env;
