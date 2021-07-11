@@ -12,12 +12,14 @@ export class LoggingInterceptor implements NestInterceptor {
     const queryStr = JSON.stringify(req.query);
     const bodyStr = JSON.stringify(req.body);
     const now = Date.now();
-    const message = `METHOD:${method} | URL:${url} | QUERY:${queryStr} | BODY:${bodyStr} [${
-      Date.now() - now
-    }ms]`;
+
     return next.handle().pipe(
       tap(() => {
-        logger.info(message);
+        logger.info(
+          `METHOD:${method} | URL:${url} | QUERY:${queryStr} | BODY:${bodyStr} [${
+            Date.now() - now
+          }ms]`
+        );
       })
     );
   }
