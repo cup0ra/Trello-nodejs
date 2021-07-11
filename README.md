@@ -70,3 +70,44 @@ npm run lint
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+
+### FASTIFY
+
+```
+  Scenarios launched:  249
+  Scenarios completed: 249
+  Requests completed:  1245
+  Mean response/sec: 40.78
+  Response time (msec):
+    min: 7
+    max: 340
+    median: 15
+    p95: 132.3
+    p99: 199
+  Scenario counts:
+    Users module: 249 (100%)
+  Codes:
+    200: 996
+    201: 249
+   ```
+   
+   ### EXPRESS
+   
+   ```
+     Scenarios launched:  246
+  Scenarios completed: 246
+  Requests completed:  1230
+  Mean response/sec: 40.29
+  Response time (msec):
+    min: 7
+    max: 403
+    median: 16
+    p95: 134
+    p99: 257.4
+  Scenario counts:
+    Users module: 246 (100%)
+  Codes:
+    200: 984
+    201: 246
+   ```
