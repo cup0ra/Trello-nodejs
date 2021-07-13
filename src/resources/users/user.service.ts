@@ -1,4 +1,4 @@
-import { IUser } from './model';
+import { IUser, UserReturn } from './model';
 import * as usersRepo from './user.memory.repository';
 import * as tasks from '../tasks/task.memory.repository';
 
@@ -6,9 +6,9 @@ const getAll = (): Promise<IUser[]> => usersRepo.getAll();
 
 const getById = (id: string): Promise<IUser | undefined> => usersRepo.getById(id);
 
-const addUser = (user: IUser): Promise<void> => usersRepo.addUser(user);
+const addUser = (user: IUser): Promise<UserReturn> => usersRepo.addUser(user);
 
-const updateUser = (user: IUser): Promise<number> => usersRepo.updateUser(user);
+const updateUser = (user: IUser): Promise<boolean> => usersRepo.updateUser(user);
 
 const deleteUser = async (id: string): Promise<boolean> => {
   const isUser = await usersRepo.deleteUser(id);

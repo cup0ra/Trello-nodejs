@@ -3,7 +3,6 @@ import {
   OK, CREATED, BAD_REQUEST, NOT_FOUND,
 } from '../../common/statusCodes';
 import { BaseError } from '../../common/errorHandler';
-import { Task } from './task.model';
 import * as taskService from './task.service';
 
 const router = Router({ mergeParams: true });
@@ -31,9 +30,7 @@ router.route('/:taskId').get(async (req, res, next) => {
 router.route('/').post(async (req: Request<{ boardId: string }>, res, next) => {
   try {
     const { boardId } = req.params;
-    const { title, order, description } = req.body;
-    const task = new Task(title, order, description, boardId);
-    await taskService.addTask(task);
+    const task = await taskService.addTask({ ...req.body, boardId });
     res.status(CREATED).json(task);
   } catch (err) {
     next(err);

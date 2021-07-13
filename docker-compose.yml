@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+    node:
+        build: .
+        image: cup0ra/node
+        container_name: node
+        env_file: .env
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - ./logs:/usr/app/logs
+            - ./src:/usr/app/src 
+        restart: always
+        depends_on:
+            - postgres
+        networks:
+            - user-defined
+    postgres:
+        build: ./DB
+        image: cup0ra/postgres
+        env_file: .env
+        ports: 
+            - ${PORT_DB}:${PORT_DB}
+        environment: 
+            POSTGRES_PASSWORD: ${PASSWORD_DB}
+            POSTGRES_USER: ${USER_DB}
+            POSTGRES_DB: ${DB}
+        networks:
+            - user-defined
+        volumes:
+            - ./db-data:/var/lib/postgresql/data
+networks: 
+    user-defined:
+        driver: bridge
