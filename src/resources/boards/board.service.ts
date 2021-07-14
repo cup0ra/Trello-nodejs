@@ -7,9 +7,9 @@ const getAll = ():Promise<IBoard[]> => boardRepo.getAll();
 
 const getById = (id: string): Promise<IBoard | undefined> => boardRepo.getById(id);
 
-const add = (board: IBoard): Promise<void> => boardRepo.addBoard(board);
+const add = (board: Omit<IBoard, 'id'>): Promise<IBoard> => boardRepo.addBoard(board);
 
-const update = (board: IBoard): Promise<number> => boardRepo.updateBoard(board);
+const update = (board: IBoard): Promise<boolean> => boardRepo.updateBoard(board);
 
 const deleteBoard = async (id: string): Promise<boolean> => {
   const isBoard = await boardRepo.deleteBoard(id);
