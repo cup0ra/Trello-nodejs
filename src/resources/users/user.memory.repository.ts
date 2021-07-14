@@ -1,6 +1,7 @@
+import { db } from '../../common/db';
 import { IUser } from './model';
 
-let users: IUser[] = [];
+let { users } = db;
 
 const getAll = async (): Promise<IUser[]> => users;
 
